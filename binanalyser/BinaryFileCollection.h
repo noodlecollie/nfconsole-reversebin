@@ -10,6 +10,8 @@ public:
 	void initialise(const std::string& rootDir);
 
 private:
+	void readCommonFile();
+
 	std::string m_RootDir;
 	BinaryFileCommon m_CommonFile;
 };

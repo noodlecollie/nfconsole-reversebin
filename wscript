@@ -19,8 +19,9 @@ class BasePlatformConfig:
 		ctx.env.append_unique("LINKFLAGS", self.linkflags)
 
 class MatchableConfig(BasePlatformConfig):
-	def __init__(self, platform=None, buildType=None, compiler=None, defines=[], cxxflags=[], linkflags=[]):
+	def __init__(self, name, platform=None, buildType=None, compiler=None, defines=[], cxxflags=[], linkflags=[]):
 		super().__init__()
+		self.name = name
 		self.platform = platform
 		self.buildType = buildType
 		self.compiler = compiler
@@ -37,7 +38,7 @@ class MatchableConfig(BasePlatformConfig):
 			self.__description("compiler", self.compiler)
 		]
 
-		return " AND ".join([item for item in components if item is not None])
+		return self.name + "(" + (" AND ".join([item for item in components if item is not None])) + ")"
 
 	def matches(self, ctx):
 		return self.__matches(self.platform, sys.platform) and \
@@ -48,14 +49,14 @@ class MatchableConfig(BasePlatformConfig):
 		if propValue is None:
 			return None
 
-		matchType = " = "
+		matchType = "="
 		toMatch = ""
 
 		if isinstance(propValue, tuple):
 			toMatch = propValue[0]
 
 			if not propValue[1]:
-				matchType = " != "
+				matchType = "!="
 		else:
 			toMatch = propValue
 
@@ -83,22 +84,34 @@ SUBDIRS = \
 CONFIGS = \
 [
 	MatchableConfig(
+		"DebugConfig",
 		buildType="debug",
 		defines=["DEBUG"]
 	),
 
 	MatchableConfig(
+		"MSVCConfig",
 		compiler="msvc",
 		cxxflags=["/EHsc"]
 	),
 
 	MatchableConfig(
-		platform="windows",
+		"MSVCConfigDebug",
+		compiler="msvc",
+		buildType="debug",
+		cxxflags=["/MDd", "/ZI", "/FS"],
+		linkflags=["/DEBUG:FASTLINK"]
+	),
+
+	MatchableConfig(
+		"WindowsSpecificConfig",
+		platform="win32",
 		defines=[r'PATH_SEP="\\"']
 	),
 
 	MatchableConfig(
-		platform=("windows", False),
+		"NonWindowsConfig",
+		platform=("win32", False),
 		defines=['PATH_SEP="/"']
 	)
 ]

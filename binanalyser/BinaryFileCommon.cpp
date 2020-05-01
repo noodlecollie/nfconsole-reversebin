@@ -1,5 +1,8 @@
 #include "BinaryFileCommon.h"
 
+// REMOVE ME
+#include "FileUtils.h"
+
 size_t BinaryFileCommon::entryCount() const
 {
 	return m_EntryList.size();

@@ -8,7 +8,7 @@
 namespace FileUtils
 {
 	size_t fileLength(std::ifstream& stream);
-	void openFile(std::ifstream& stream, const std::string& path, bool log = false);
+	void openBinaryFile(std::ifstream& stream, const std::string& path, bool log = false);
 
 	template<typename... ARGS>
 	std::string makePath(ARGS... pathSegments)

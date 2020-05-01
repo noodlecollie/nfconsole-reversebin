@@ -8,14 +8,16 @@ namespace FileUtils
 	{
 		std::streampos origPos = stream.tellg();
 
+		stream.seekg(std::ios_base::beg, 0);
+		std::streampos beginPos = stream.tellg();
 		stream.seekg(std::ios_base::end, 0);
 		std::streampos endPos = stream.tellg();
-		stream.seekg(std::ios_base::beg);
+		stream.seekg(std::ios_base::beg, origPos);
 
-		return endPos;
+		return endPos - beginPos;
 	}
 
-	void openFile(std::ifstream& stream, const std::string& path, bool log)
+	void openBinaryFile(std::ifstream& stream, const std::string& path, bool log)
 	{
 		if ( log )
 		{
@@ -26,7 +28,7 @@ namespace FileUtils
 
 		try
 		{
-			stream.open(path);
+			stream.open(path, std::ios::in | std::ios::binary);
 		}
 		catch ( const std::ifstream::failure ex )
 		{
