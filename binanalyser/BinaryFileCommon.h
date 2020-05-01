@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <fstream>
 
-class CommonFileListing
+class BinaryFileCommon
 {
 public:
 	struct Entry

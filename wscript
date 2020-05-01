@@ -77,7 +77,7 @@ APPNAME = "nfconsole-reversebin"
 
 SUBDIRS = \
 [
-	"analyser-common"
+	"binanalyser"
 ]
 
 CONFIGS = \

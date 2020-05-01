@@ -4,18 +4,17 @@ import os
 import sys
 
 def __directoryName(ctx):
-	return os.path.basename(os.path.dirname(ctx.path.abspath()))
+	return os.path.basename(ctx.path.abspath())
 
 def options(ctx):
 	pass
 
 def configure(ctx):
 	ctx.msg("Configuring", __directoryName(ctx), color="YELLOW")
-	ctx.msg("Compiler", ctx.env.CXX_NAME, color="BLUE")
 
 	ctx.define("BINARY_NAME", __directoryName(ctx))
 
 def build(bld):
 	bld.program(source=bld.path.ant_glob("*.cpp"),
-				target="analyser-common",
+				target=__directoryName(bld),
 				includes=["."])
