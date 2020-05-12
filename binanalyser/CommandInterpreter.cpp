@@ -3,10 +3,17 @@
 #include "CommandInterpreter.h"
 #include "StringUtils.h"
 
-CommandInterpreter::CommandInterpreter(const std::string& quitCommand) :
+CommandInterpreter::CommandInterpreter(const std::string& helpCommand, const std::string& quitCommand) :
+	m_HelpCommand(helpCommand),
 	m_QuitCommand(quitCommand)
 {
+	StringUtils::trim(m_HelpCommand);
 	StringUtils::trim(m_QuitCommand);
+
+	if ( m_HelpCommand.size() < 1 )
+	{
+		throw std::runtime_error("Help command string must not be empty.");
+	}
 
 	if ( m_QuitCommand.size() < 1 )
 	{
@@ -34,7 +41,7 @@ void CommandInterpreter::addCommand(const std::string& commandName, const Comman
 
 void CommandInterpreter::run()
 {
-	std::cout << "Type '" << m_QuitCommand << "' to quit." << std::endl;
+	std::cout << "Type '" << m_HelpCommand << "' for help, or '" << m_QuitCommand << "' to quit." << std::endl;
 
 	std::string line;
 	std::deque<std::string> tokens;
@@ -66,6 +73,12 @@ bool CommandInterpreter::handleInput(std::deque<std::string>& tokens)
 		return false;
 	}
 
+	if ( tokens[0] == m_HelpCommand )
+	{
+		printHelp();
+		return true;
+	}
+
 	for ( const CommandEntry& entry : m_CommandHandlers )
 	{
 		if ( entry.first == tokens[0] )
@@ -78,4 +91,17 @@ bool CommandInterpreter::handleInput(std::deque<std::string>& tokens)
 
 	std::cout << "Unrecognised command: " << tokens[0] << std::endl;
 	return true;
+}
+
+void CommandInterpreter::printHelp()
+{
+	std::cout << (m_CommandHandlers.size() + 2) << " available commands:" << std::endl;
+
+	for ( const CommandEntry& entry : m_CommandHandlers )
+	{
+		std::cout << "  " << entry.first << std::endl;
+	}
+
+	std::cout << "  " << m_HelpCommand << std::endl;
+	std::cout << "  " << m_QuitCommand << std::endl;
 }
