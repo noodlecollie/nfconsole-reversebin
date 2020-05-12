@@ -9,6 +9,8 @@ public:
 
 	void initialise(const std::string& rootDir);
 
+	const BinaryFileCommon& common() const;
+
 private:
 	void readCommonFile();
 

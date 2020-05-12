@@ -6,6 +6,11 @@
 
 BinaryFileCollection BinaryFileCollection::Instance;
 
+const BinaryFileCommon& BinaryFileCollection::common() const
+{
+	return m_CommonFile;
+}
+
 void BinaryFileCollection::initialise(const std::string& rootDir)
 {
 	m_RootDir = rootDir;

@@ -95,13 +95,15 @@ bool CommandInterpreter::handleInput(std::deque<std::string>& tokens)
 
 void CommandInterpreter::printHelp()
 {
+	static constexpr const char* const INDENT = "  ";
+
 	std::cout << (m_CommandHandlers.size() + 2) << " available commands:" << std::endl;
 
 	for ( const CommandEntry& entry : m_CommandHandlers )
 	{
-		std::cout << "  " << entry.first << std::endl;
+		std::cout << INDENT << entry.first << std::endl;
 	}
 
-	std::cout << "  " << m_HelpCommand << std::endl;
-	std::cout << "  " << m_QuitCommand << std::endl;
+	std::cout << INDENT << m_HelpCommand << std::endl;
+	std::cout << INDENT << m_QuitCommand << std::endl;
 }

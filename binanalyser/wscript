@@ -15,6 +15,6 @@ def configure(ctx):
 	ctx.define("BINARY_NAME", __directoryName(ctx))
 
 def build(bld):
-	bld.program(source=bld.path.ant_glob("*.cpp"),
+	bld.program(source=bld.path.ant_glob("**/*.cpp"),
 				target=__directoryName(bld),
 				includes=["."])

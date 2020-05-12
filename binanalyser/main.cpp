@@ -5,6 +5,7 @@
 
 #include "BinaryFileCollection.h"
 #include "CommandInterpreter.h"
+#include "Commands.h"
 
 static void runTask(const std::string& directoryPath)
 {
@@ -15,7 +16,9 @@ static void runTask(const std::string& directoryPath)
 		;
 
 	BinaryFileCollection::Instance.initialise(directoryPath);
+
 	CommandInterpreter interpreter;
+	Commands::addAllCommands(interpreter);
 	interpreter.run();
 }
 
