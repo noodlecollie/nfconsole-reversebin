@@ -1,7 +1,5 @@
 #include "BinaryFileCommon.h"
-
-// REMOVE ME
-#include "FileUtils.h"
+#include "StreamUtils.h"
 
 size_t BinaryFileCommon::entryCount() const
 {
@@ -42,8 +40,16 @@ void BinaryFileCommon::read(std::ifstream& input)
 
 bool BinaryFileCommon::readEntry(std::ifstream& input, Entry& entry)
 {
-	input >> entry.dataArchive >> entry.metaArchive;
+	StreamUtils::readBigEndianWord(input, entry.dataArchive);
 
-	// Final entry in the common file listing is an all-zero word.
-	return input.good() && entry.dataArchive != 0;
+	// Final entry in the common file listing is a single all-zero word.
+	// Check for this first.
+	if ( entry.dataArchive == 0 )
+	{
+		return false;
+	}
+
+	StreamUtils::readBigEndianWord(input, entry.metaArchive);
+
+	return input.good();
 }
